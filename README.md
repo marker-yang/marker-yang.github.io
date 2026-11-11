@@ -2,7 +2,8 @@
 
 杨天的个人站。纯静态，Astro 构建，无框架运行时。
 
-- 线上地址：待定（`codepulse.top` 暂未启用，DNS 与备案均未改动）
+- 线上地址：**https://marker-yang.github.io/**
+- 仓库：`marker-yang/marker-yang.github.io`（`main` 放源码，`gh-pages` 放构建产物）
 - 设计决策记录：[`docs/site-brief.md`](docs/site-brief.md)
 - 用语约定：[`GLOSSARY.md`](GLOSSARY.md)
 
@@ -29,15 +30,24 @@ npm run preview  # 预览构建产物
 
 新增一个案例：往 `cases` 数组里加一项，`slug` 会自动生成详情页并接入上一个/下一个导航。截图放 `public/img/<slug>.webp`，在条目里填 `image`；不填则自动使用内置的线稿图形（`CaseCard` 里按 slug 区分）。
 
-## 部署
+## 部署（GitHub Pages）
 
-产物是纯静态文件，任何静态托管都能跑。构建时可用 `SITE_URL` 注入正式地址，影响 canonical 与分享卡片的绝对路径：
+源码在 `main`，构建产物推到 `gh-pages`，Pages 从 `gh-pages` 分支发布。
 
 ```bash
-SITE_URL=https://example.com npm run build
+SITE_URL=https://marker-yang.github.io npm run build
+
+# 产物推到一个只含 dist 内容的 gh-pages 分支
+rm -rf /tmp/ghp && mkdir -p /tmp/ghp && cp -r dist/. /tmp/ghp/
+touch /tmp/ghp/.nojekyll          # 关键：否则 Jekyll 会吞掉 _astro/
+cd /tmp/ghp && git init -q -b gh-pages && git add -A
+git -c user.name="marker" -c user.email="1042164333@qq.com" commit -qm "build"
+git push -f https://github.com/marker-yang/marker-yang.github.io.git gh-pages
 ```
 
-不设该变量时回退到当前访问域名，所以先部署再改也来得及。
+**`.nojekyll` 不是可选项。** GitHub Pages 默认跑 Jekyll，它跳过所有下划线开头的目录，`_astro/` 里的 CSS 与 JS 会全部 404——页面只剩无样式的 HTML。
+
+`SITE_URL` 决定 canonical 与分享卡片的绝对路径；不设时回退到当前访问域名。
 
 ## 目录
 
