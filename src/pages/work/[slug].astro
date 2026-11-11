@@ -1,0 +1,571 @@
+---
+import Base from '../../layouts/Base.astro';
+import { cases } from '../../data/cases';
+import type { CaseStudy } from '../../data/cases';
+
+export function getStaticPaths() {
+  return cases.map((study, i) => ({
+    params: { slug: study.slug },
+    props: {
+      study,
+      prev: cases[(i - 1 + cases.length) % cases.length],
+      next: cases[(i + 1) % cases.length],
+    },
+  }));
+}
+
+export interface Props {
+  study: CaseStudy;
+  prev: CaseStudy;
+  next: CaseStudy;
+}
+
+const { study, prev, next } = Astro.props;
+const b = study.body;
+---
+
+<Base
+  title={`${study.title} · 杨天`}
+  description={study.summary}
+  ogType="article"
+>
+  <article class="cs">
+    <header class="cs-head" data-dark>
+      <canvas class="cs-canvas" data-cs-canvas aria-hidden="true"></canvas>
+      <div class="wrap cs-head-in">
+        <a class="back mono" href="/#work">← 全部作品</a>
+
+        <div class="cs-meta">
+          <span class="mono">{study.index} / {study.client}</span>
+          <span class="mono">{study.period}</span>
+        </div>
+
+        <h1 class="cs-title">{study.title}</h1>
+        <p class="cs-sum">{study.summary}</p>
+
+        <dl class="cs-facts">
+          <div>
+            <dt class="mono">角色</dt>
+            <dd>{study.role}</dd>
+          </div>
+          <div class="cs-facts-stack">
+            <dt class="mono">技术栈</dt>
+            <dd>{study.stack.join(' · ')}</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    {study.image && (
+      <figure class="cs-hero">
+        <div class="wrap">
+          <img
+            src={study.image.src}
+            alt={study.image.alt}
+            width="1600"
+            height={study.image.ratio === '1600 / 871' ? 871 : 493}
+            decoding="async"
+          />
+        </div>
+      </figure>
+    )}
+
+    <div class="wrap cs-main">
+      <section class="cs-block">
+        <h2 class="mono cs-label">背景</h2>
+        <p class="cs-context">{b.context}</p>
+      </section>
+
+      <section class="cs-block">
+        <h2 class="mono cs-label">问题</h2>
+        <ol class="cs-problems">
+          {b.problem.map((p, i) => (
+            <li class="rv">
+              <span class="mono cs-num">{String(i + 1).padStart(2, '0')}</span>
+              <span>{p}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {study.diagram === 'pipeline' && (
+        <section class="cs-block cs-diagram-block">
+          <h2 class="mono cs-label">数据流</h2>
+          <div class="pipeline rv" role="img" aria-label="九个数据源经脚本清洗后写入飞书多维表格">
+            <div class="pipe-col">
+              <span class="mono pipe-head">数据源</span>
+              <ul>
+                <li>Google</li><li>Facebook</li><li>Awin</li>
+                <li>Impact</li><li>Klarna</li><li>KOL</li>
+                <li>Klaviyo</li><li>Shopify</li><li class="pipe-more">+1</li>
+              </ul>
+            </div>
+            <div class="pipe-arrow" aria-hidden="true">
+              <svg viewBox="0 0 60 12"><path d="M0 6h54M48 1l6 5-6 5" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+            </div>
+            <div class="pipe-col pipe-mid">
+              <span class="mono pipe-head">抓取与清洗</span>
+              <ul>
+                <li>Python</li><li>Playwright</li><li>影刀 RPA</li><li>ShopifyQL</li>
+              </ul>
+            </div>
+            <div class="pipe-arrow" aria-hidden="true">
+              <svg viewBox="0 0 60 12"><path d="M0 6h54M48 1l6 5-6 5" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+            </div>
+            <div class="pipe-col">
+              <span class="mono pipe-head">落库</span>
+              <ul>
+                <li>31 列维度</li><li>月份子表</li><li>累加汇总</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section class="cs-block">
+        <h2 class="mono cs-label">做法</h2>
+        <div class="cs-approach">
+          {b.approach.map((a, i) => (
+            <div class="rv ap" style={`--d:${i * 0.05}s`}>
+              <span class="mono ap-num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="ap-title">{a.title}</h3>
+                <p class="ap-text">{a.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="cs-block cs-result-block">
+        <h2 class="mono cs-label">结果</h2>
+        <dl class="cs-results">
+          {b.result.map((r) => (
+            <div class="res rv">
+              <dd>{r.value}</dd>
+              <dt>{r.label}</dt>
+              {r.note && <span class="res-note">{r.note}</span>}
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {b.closing && (
+        <blockquote class="cs-quote rv">
+          <p>{b.closing}</p>
+        </blockquote>
+      )}
+
+      <nav class="cs-nav" aria-label="案例导航">
+        <a class="cs-nav-item" href={`/work/${prev.slug}/`}>
+          <span class="mono">上一个</span>
+          <span class="cs-nav-title">{prev.title}</span>
+        </a>
+        <a class="cs-nav-item next" href={`/work/${next.slug}/`}>
+          <span class="mono">下一个</span>
+          <span class="cs-nav-title">{next.title}</span>
+        </a>
+      </nav>
+
+      <div class="cs-cta">
+        <p>你在做的东西和这差不多？</p>
+        <a class="mono cs-cta-link" href="/#contact">邮件联系 →</a>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<script>
+  // Reuse the hero network at low density as a quiet page header.
+  import { initHeroCanvas } from '../../scripts/hero-net';
+  const c = document.querySelector('[data-cs-canvas]');
+  if (c instanceof HTMLCanvasElement) initHeroCanvas(c);
+</script>
+
+<style>
+  .cs {
+    background: var(--paper);
+  }
+
+  /* Header */
+  .cs-head {
+    position: relative;
+    background: var(--ink-950);
+    color: var(--on-ink);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .cs-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+    mask-image: radial-gradient(90% 80% at 75% 30%, #000 0%, transparent 72%);
+    -webkit-mask-image: radial-gradient(90% 80% at 75% 30%, #000 0%, transparent 72%);
+  }
+  .cs-head-in {
+    position: relative;
+    z-index: 1;
+    padding-top: clamp(6rem, 12vh, 8.5rem);
+    padding-bottom: clamp(3rem, 6vw, 4.75rem);
+  }
+  .back {
+    display: inline-block;
+    color: var(--on-ink-muted);
+    font-size: 0.63rem;
+    letter-spacing: 0.1em;
+    margin-bottom: clamp(2rem, 6vw, 4rem);
+    transition: color 0.25s, transform 0.35s var(--ease);
+  }
+  .back:hover {
+    color: var(--on-ink);
+    transform: translateX(-4px);
+  }
+  .cs-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--on-ink-muted);
+    font-size: 0.63rem;
+    letter-spacing: 0.1em;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--on-ink-line);
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .cs-meta .mono:first-child {
+    color: var(--accent);
+  }
+  .cs-title {
+    font-size: clamp(2rem, 5.4vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    max-width: 20ch;
+    margin-bottom: 1.1rem;
+  }
+  .cs-sum {
+    color: var(--on-ink-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.8;
+    max-width: 52ch;
+  }
+  .cs-facts {
+    display: flex;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    margin-top: clamp(2rem, 4vw, 2.75rem);
+    padding-top: 1.35rem;
+    border-top: 1px solid var(--on-ink-line);
+    flex-wrap: wrap;
+  }
+  .cs-facts dt {
+    color: rgba(243, 240, 232, 0.4);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.4rem;
+  }
+  .cs-facts dd {
+    font-size: 0.88rem;
+    color: var(--on-ink);
+  }
+  .cs-facts-stack dd {
+    color: var(--on-ink-muted);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* Hero shot */
+  .cs-hero {
+    margin: 0;
+    padding-top: clamp(2rem, 4vw, 3.25rem);
+    background: var(--paper);
+  }
+  .cs-hero img {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    box-shadow: 0 24px 60px -32px rgba(20, 20, 15, 0.45);
+  }
+
+  /* Body */
+  .cs-main {
+    padding-top: clamp(2.75rem, 6vw, 4.5rem);
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    max-width: 900px;
+  }
+  .cs-block {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .cs-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    padding-top: 0.5rem;
+  }
+  .cs-context {
+    font-size: clamp(1.05rem, 1.7vw, 1.18rem);
+    line-height: 1.9;
+    color: var(--text);
+    letter-spacing: -0.008em;
+  }
+
+  .cs-problems {
+    display: grid;
+    gap: 1.15rem;
+  }
+  .cs-problems li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.85rem;
+    font-size: 0.97rem;
+    line-height: 1.85;
+    color: var(--text-2);
+  }
+  .cs-num {
+    color: var(--accent);
+    font-size: 0.6rem;
+    padding-top: 0.55em;
+    letter-spacing: 0.06em;
+  }
+
+  /* Pipeline diagram */
+  .cs-diagram-block {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+  }
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 1.5rem 1.35rem;
+    border: 1px solid var(--line);
+    background: var(--paper-2);
+    border-radius: 3px;
+  }
+  .pipe-col {
+    flex: 1;
+    min-width: 0;
+  }
+  .pipe-head {
+    display: block;
+    font-size: 0.56rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.7rem;
+  }
+  .pipe-col ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .pipe-col li {
+    font-size: 0.7rem;
+    padding: 0.26rem 0.45rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--text-2);
+    line-height: 1.3;
+  }
+  .pipe-mid li {
+    border-color: rgba(194, 35, 63, 0.28);
+    color: var(--text);
+  }
+  .pipe-more {
+    color: var(--muted) !important;
+  }
+  .pipe-arrow {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    color: var(--muted);
+  }
+  .pipe-arrow svg {
+    width: 100%;
+  }
+
+  /* Approach */
+  .cs-approach {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .ap {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.85rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .ap:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .ap-num {
+    font-size: 0.6rem;
+    color: var(--muted);
+    padding-top: 0.45em;
+    letter-spacing: 0.06em;
+  }
+  .ap-title {
+    font-size: clamp(1rem, 1.5vw, 1.12rem);
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    margin-bottom: 0.5rem;
+  }
+  .ap-text {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--text-2);
+  }
+
+  /* Results */
+  .cs-result-block {
+    border-top: 1px solid var(--line-strong);
+    padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+  .cs-results {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .res dd {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+  }
+  .res dt {
+    font-size: 0.8rem;
+    color: var(--text-2);
+  }
+  .res-note {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .cs-quote {
+    margin: 0;
+    padding-left: clamp(1rem, 3vw, 1.75rem);
+    border-left: 2px solid var(--accent);
+  }
+  .cs-quote p {
+    font-size: clamp(1.05rem, 1.9vw, 1.3rem);
+    line-height: 1.8;
+    letter-spacing: -0.012em;
+    color: var(--text);
+  }
+
+  /* Prev / next */
+  .cs-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 1.75rem;
+  }
+  .cs-nav-item {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem 0;
+  }
+  .cs-nav-item .mono {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+  }
+  .cs-nav-title {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.25s;
+  }
+  .cs-nav-item:hover .cs-nav-title {
+    color: var(--accent);
+  }
+  .cs-nav-item.next {
+    text-align: right;
+  }
+
+  .cs-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1.5rem 1.75rem;
+    background: var(--ink-950);
+    color: var(--on-ink);
+    border-radius: 3px;
+  }
+  .cs-cta p {
+    font-size: 1rem;
+  }
+  .cs-cta-link {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    transition: transform 0.35s var(--ease);
+    display: inline-block;
+  }
+  .cs-cta-link:hover {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 860px) {
+    .cs-block,
+    .cs-diagram-block {
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+    .cs-label {
+      padding-top: 0;
+    }
+    .pipeline {
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .pipe-arrow {
+      width: 100%;
+      height: 16px;
+      margin-block: 0.15rem;
+    }
+    .pipe-arrow svg {
+      width: 26px;
+      height: 16px;
+      transform: rotate(90deg);
+      overflow: visible;
+    }
+    .cs-results {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .res {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .res dd {
+      margin-bottom: 0;
+      font-size: 1.5rem;
+    }
+    .res-note {
+      margin-top: 0;
+    }
+    .cs-nav {
+      grid-template-columns: 1fr;
+    }
+    .cs-nav-item.next {
+      text-align: left;
+    }
+  }
+</style>

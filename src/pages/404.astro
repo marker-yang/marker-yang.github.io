@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="页面不存在 · 杨天" description="这个地址没有内容。">
+  <section class="nf" data-dark>
+    <div class="wrap">
+      <span class="mono nf-code">404</span>
+      <h1 class="nf-title">这个地址没有内容。</h1>
+      <p class="nf-text">
+        可能是链接过期了，也可能是我删掉了某一页。<br />
+        回首页看看我做过什么，或者直接写信给我。
+      </p>
+      <div class="nf-links">
+        <a class="nf-btn" href="/">回首页</a>
+        <a class="nf-btn nf-btn-ghost" href="/#contact">邮件联系</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    background: var(--ink-950);
+    color: var(--on-ink);
+    padding-block: 8rem;
+  }
+  .nf-code {
+    color: var(--accent);
+    letter-spacing: 0.16em;
+    font-size: 0.7rem;
+  }
+  .nf-title {
+    font-size: clamp(2rem, 5.5vw, 3.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    margin-block: 1.1rem 1.25rem;
+  }
+  .nf-text {
+    color: var(--on-ink-muted);
+    font-size: 0.98rem;
+    line-height: 1.9;
+    max-width: 40ch;
+  }
+  .nf-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+    flex-wrap: wrap;
+  }
+  .nf-btn {
+    padding: 0.8rem 1.3rem;
+    background: var(--on-ink);
+    color: var(--ink-950);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    transition: background 0.3s var(--ease), color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+  .nf-btn:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .nf-btn-ghost {
+    background: transparent;
+    color: var(--on-ink);
+    border-color: var(--on-ink-line);
+  }
+  .nf-btn-ghost:hover {
+    background: rgba(243, 240, 232, 0.07);
+    color: var(--on-ink);
+    border-color: var(--on-ink);
+  }
+</style>

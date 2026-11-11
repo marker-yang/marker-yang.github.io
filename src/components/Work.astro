@@ -1,0 +1,118 @@
+---
+import { cases, shortProjects } from '../data/cases';
+import CaseRow from '../components/CaseRow.astro';
+---
+
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-index mono">02</span>
+      <h2 class="sec-title">作品</h2>
+      <p class="sec-sub">四个案例，从平台到脚本到站点本身。</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    {cases.map((study, i) => <CaseRow study={study} order={i} />)}
+
+    <div class="short">
+      <h3 class="mono short-title">其他项目</h3>
+      <ul class="short-list">
+        {shortProjects.map((p, i) => (
+          <li class="short-item rv" style={`--d:${i * 0.07}s`}>
+            <div class="short-head">
+              <h4>{p.name}</h4>
+              <span class="mono short-period">{p.period}</span>
+            </div>
+            <p class="short-text">{p.text}</p>
+            <div class="short-foot">
+              <span class="mono short-client">{p.client}</span>
+              <span class="mono short-stack">{p.stack}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .work {
+    padding-block: clamp(4.5rem, 10vw, 8.5rem) clamp(3rem, 6vw, 4.5rem);
+    background: var(--paper);
+  }
+
+  .short {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--line-strong);
+    padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+  .short-title {
+    font-size: 0.63rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    margin-bottom: 1.5rem;
+  }
+  .short-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .short-item {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .short-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.7rem;
+  }
+  .short-head h4 {
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .short-period {
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: none;
+    white-space: nowrap;
+  }
+  .short-text {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--text-2);
+    flex: 1;
+  }
+  .short-foot {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .short-client {
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: none;
+  }
+  .short-stack {
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: none;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .short-list {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+  }
+</style>

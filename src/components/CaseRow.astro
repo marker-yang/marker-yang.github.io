@@ -1,0 +1,284 @@
+---
+import type { CaseStudy } from '../data/cases';
+
+export interface Props {
+  study: CaseStudy;
+  order: number;
+}
+
+const { study, order } = Astro.props;
+const anchor = `case-${study.slug}`;
+
+// Each case without a screenshot gets its own drawing, never a shared placeholder.
+type Glyph = 'pipeline' | 'layout';
+const glyph: Glyph =
+  study.slug === 'this-site' ? 'layout' : 'pipeline';
+---
+
+<article class={`case ${order % 2 === 1 ? 'flip' : ''}`} id={anchor}>
+  <a class="case-link" href={`/work/${study.slug}/`} aria-label={`查看案例：${study.title}`}>
+    <div class="case-media rv">
+      {study.image ? (
+        <figure class="shot" data-parallax>
+          <img
+            src={study.image.src}
+            alt={study.image.alt}
+            width="1600"
+            height={study.image.ratio === '1600 / 871' ? 871 : 493}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      ) : (
+        <div class="drawing" data-drawing aria-hidden="true">
+          {glyph === 'layout' ? (
+            <svg viewBox="0 0 320 200" fill="none">
+              <g stroke="currentColor" stroke-width="1" opacity=".38">
+                <rect x="30" y="22" width="260" height="156" rx="4" />
+                <path d="M30 46h260M64 22v156" />
+              </g>
+              <g fill="currentColor" opacity=".5">
+                <rect x="44" y="32" width="12" height="5" rx="1.5" />
+                <rect x="80" y="60" width="58" height="7" rx="2" />
+                <rect x="80" y="76" width="94" height="5" rx="1.5" opacity=".55" />
+                <rect x="80" y="96" width="120" height="52" rx="3" opacity=".2" />
+                <rect x="122" y="118" width="36" height="8" rx="2" />
+                <rect x="214" y="60" width="58" height="34" rx="2" opacity=".28" />
+                <rect x="214" y="104" width="58" height="44" rx="2" opacity=".16" />
+              </g>
+              <g stroke="#c2233f" stroke-width="1" opacity=".9">
+                <path d="M210 64h66v38" stroke-dasharray="3 3" />
+              </g>
+              <circle cx="210" cy="64" r="2.5" fill="#c2233f" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 320 200" fill="none">
+              <g stroke="currentColor" stroke-width="1" opacity=".4">
+                <rect x="14" y="30" width="72" height="24" rx="3" />
+                <rect x="14" y="88" width="72" height="24" rx="3" />
+                <rect x="14" y="146" width="72" height="24" rx="3" />
+                <rect x="128" y="46" width="64" height="108" rx="3" />
+                <rect x="232" y="46" width="74" height="24" rx="3" />
+                <rect x="232" y="88" width="74" height="24" rx="3" />
+                <rect x="232" y="130" width="74" height="24" rx="3" />
+                <path d="M86 42h22v38h20M86 100h42M86 158h22v-38h20M192 58h40M192 100h40M192 142h40" />
+              </g>
+              <g fill="#c2233f" opacity=".95">
+                <circle cx="160" cy="100" r="3" />
+              </g>
+              <g fill="currentColor" opacity=".7">
+                <circle cx="108" cy="80" r="2" />
+                <circle cx="108" cy="120" r="2" />
+                <circle cx="192" cy="100" r="2" />
+              </g>
+            </svg>
+          )}
+        </div>
+      )}
+      <span class="case-index mono">{study.index}</span>
+    </div>
+
+    <div class="case-body">
+      <div class="case-head rv">
+        <span class="mono case-client">{study.client}</span>
+        <span class="mono case-period">{study.period}</span>
+      </div>
+      <h3 class="case-title rv">{study.title}</h3>
+      <p class="case-sum rv">{study.summary}</p>
+
+      <ul class="case-stack rv">
+        {study.stack.map((s) => <li class="mono">{s}</li>)}
+      </ul>
+
+      <dl class="case-metrics rv">
+        {study.metrics.map((m) => (
+          <div class="cm">
+            <dd>{m.value}</dd>
+            <dt>{m.label}</dt>
+          </div>
+        ))}
+      </dl>
+
+      <span class="case-more">
+        <span>阅读案例</span>
+        <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
+          <path d="M0 5h14M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .case {
+    border-top: 1px solid var(--line);
+  }
+  .case-link {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(1.75rem, 5vw, 4.5rem);
+    align-items: center;
+    padding-block: clamp(2.75rem, 6vw, 4.5rem);
+    position: relative;
+  }
+  .case.flip .case-link {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+  .case.flip .case-media {
+    order: 2;
+  }
+
+  .case-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink-900);
+    border-radius: 3px;
+    isolation: isolate;
+  }
+  .shot {
+    position: relative;
+    overflow: hidden;
+  }
+  .shot img {
+    width: 100%;
+    height: auto;
+    transform: translateY(var(--py, 0px));
+    transition: transform 1.1s var(--ease), filter 0.8s var(--ease);
+  }
+  .case-link:hover .shot img {
+    transform: scale(1.03) translateY(var(--py, 0px));
+  }
+  .case-index {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    color: rgba(243, 240, 232, 0.9);
+    background: rgba(8, 8, 10, 0.55);
+    backdrop-filter: blur(6px);
+    padding: 0.5rem 0.7rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    border-bottom-right-radius: 3px;
+  }
+
+  .drawing {
+    aspect-ratio: 16 / 10;
+    color: rgba(243, 240, 232, 0.6);
+    display: grid;
+    place-items: center;
+    background: radial-gradient(80% 80% at 50% 40%, #14141a 0%, #0b0b0e 100%);
+  }
+  .drawing svg {
+    width: 78%;
+    height: auto;
+  }
+
+  .case-body {
+    display: flex;
+    flex-direction: column;
+  }
+  .case-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--muted);
+    font-size: 0.63rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.1rem;
+  }
+  .case-client {
+    color: var(--accent);
+  }
+  .case-title {
+    font-size: clamp(1.45rem, 2.6vw, 2.05rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.22;
+    margin-bottom: 0.9rem;
+  }
+  .case-sum {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 42ch;
+    margin-bottom: 1.4rem;
+  }
+  .case-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .case-stack li {
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    padding: 0.24rem 0.5rem;
+    border-radius: 2px;
+  }
+
+  .case-metrics {
+    display: flex;
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    flex-wrap: wrap;
+    padding-top: 1.3rem;
+    border-top: 1px solid var(--line);
+    margin-bottom: 1.5rem;
+  }
+  .cm dd {
+    font-size: clamp(1.05rem, 1.9vw, 1.35rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.28rem;
+    white-space: nowrap;
+  }
+  .cm dt {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .case-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .case-more svg {
+    transition: transform 0.4s var(--ease);
+  }
+  .case-link:hover .case-more svg {
+    transform: translateX(6px);
+  }
+  .case-link:hover .case-more {
+    color: var(--accent);
+  }
+
+  @media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
+    .shot img {
+      transform: scale(1.06) translateY(var(--py, 0px));
+    }
+    .case-link:hover .shot img {
+      transform: scale(1.09) translateY(var(--py, 0px));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .case-link,
+    .case.flip .case-link {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+    }
+    .case.flip .case-media {
+      order: 0;
+    }
+    .case-sum {
+      max-width: none;
+    }
+  }
+</style>

@@ -1,0 +1,171 @@
+---
+import { timeline } from '../data/cases';
+---
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-index mono">03</span>
+      <h2 class="sec-title">关于</h2>
+      <p class="sec-sub">八年，四家公司，三件一直没变的事。</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-main">
+        <p class="lead rv">
+          我是杨天，全栈工程师，重心在前端。2018 年开始写代码，做过企业级低代码平台、
+          流量中台、小程序，也做过跨境业务的数据自动化和海外品牌站。
+        </p>
+
+        <p class="rv">
+          这些年我最擅长的事情，是把一个还停留在需求文档里的系统，
+          拆成能一步步交付的东西：先把数据和口径定死，再把界面搭出来，
+          最后才去调性能。顺序反了，前面省下的时间都会在后期还回去。
+        </p>
+
+        <p class="rv">
+          技术栈上，前端是 Vue3 与 React（含 Taro 小程序），工程化用 Vite / Webpack，
+          可视化用 ECharts 与 LogicFlow；服务端与自动化用 Python、Playwright、影刀 RPA，
+          接得动飞书、Shopify、各类第三方后台的 API。最近两年也在反复做一件事：
+          把网站的首屏从 4 秒压到 2 秒以内——这件事对转化率的影响，比多加十个功能都大。
+        </p>
+
+        <div class="creed rv">
+          <p>三件一直没变的事</p>
+          <ol>
+            <li><span class="mono">01</span>先量，再改。没有测量依据的优化就是猜。</li>
+            <li><span class="mono">02</span>机制优于功能。能配置的，就不要写死。</li>
+            <li><span class="mono">03</span>交付物要能被别人接手。代码是写给下一个人看的。</li>
+          </ol>
+        </div>
+      </div>
+
+      <aside class="about-side">
+        <h3 class="mono side-title">工作经历</h3>
+        <ol class="timeline">
+          {timeline.map((t) => (
+            <li class="rv">
+              <span class="tl-period mono">{t.period}</span>
+              <span class="tl-company">{t.company}</span>
+              <span class="tl-meta">{t.role} · {t.place}</span>
+            </li>
+          ))}
+        </ol>
+
+        <h3 class="mono side-title side-title-2">教育</h3>
+        <p class="edu rv">
+          河源职业技术学院 · 全日制大专<br />
+          <span class="mono">2011.09 — 2014.07</span>
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding-block: clamp(4.5rem, 10vw, 8.5rem);
+    background: var(--paper-2);
+    border-top: 1px solid var(--line);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    gap: clamp(2.5rem, 7vw, 6rem);
+  }
+  .about-main p {
+    color: var(--text-2);
+    font-size: 1rem;
+    line-height: 1.95;
+    margin-bottom: 1.35rem;
+    max-width: 58ch;
+  }
+  .about-main .lead {
+    color: var(--text);
+    font-size: clamp(1.1rem, 1.7vw, 1.32rem);
+    line-height: 1.75;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.75rem;
+  }
+
+  .creed {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .creed > p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .creed ol {
+    display: grid;
+    gap: 0.85rem;
+  }
+  .creed li {
+    display: flex;
+    gap: 0.9rem;
+    align-items: baseline;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .creed li .mono {
+    color: var(--accent);
+    font-size: 0.6rem;
+    flex: none;
+    letter-spacing: 0.06em;
+  }
+
+  .side-title {
+    font-size: 0.63rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0.2rem;
+  }
+  .side-title-2 {
+    margin-top: 2.5rem;
+  }
+
+  .timeline li {
+    display: grid;
+    gap: 0.22rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .tl-period {
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: none;
+  }
+  .tl-company {
+    font-size: 0.98rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .tl-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .edu {
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .edu .mono {
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 860px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

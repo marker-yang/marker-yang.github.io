@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Work from '../components/Work.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<Base title="杨天 · 全栈工程师">
+  <Hero />
+
+  <section class="cap">
+    <div class="wrap cap-grid">
+      <p class="cap-lead rv">
+        前端是主场，但一个功能从数据库到首屏的每一段，我都写过、也调过。
+      </p>
+      <ul class="cap-list">
+        <li class="rv">
+          <span class="mono cap-k">前端</span>
+          <span class="cap-v">Vue3 · React · TypeScript · Vite</span>
+        </li>
+        <li class="rv" style="--d:.06s">
+          <span class="mono cap-k">可视化</span>
+          <span class="cap-v">ECharts · LogicFlow · Canvas</span>
+        </li>
+        <li class="rv" style="--d:.12s">
+          <span class="mono cap-k">自动化</span>
+          <span class="cap-v">Python · Playwright · RPA</span>
+        </li>
+        <li class="rv" style="--d:.18s">
+          <span class="mono cap-k">工程与性能</span>
+          <span class="cap-v">Webpack · 核心指标 · LCP 优化</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <Work />
+  <About />
+  <Contact />
+</Base>
+
+<style>
+  .cap {
+    background: var(--paper);
+    padding-block: clamp(2.75rem, 6vw, 4.5rem);
+    border-bottom: 1px solid var(--line);
+  }
+  .cap-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(1.75rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .cap-lead {
+    font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+    line-height: 1.72;
+    letter-spacing: -0.012em;
+    max-width: 26ch;
+    color: var(--text);
+  }
+  .cap-list {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .cap-list li {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 0.78rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .cap-k {
+    color: var(--muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+  }
+  .cap-v {
+    font-size: 0.9rem;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+
+  @media (max-width: 820px) {
+    .cap-grid {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    .cap-list li {
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+    }
+  }
+</style>

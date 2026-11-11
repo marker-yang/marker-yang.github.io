@@ -1,0 +1,127 @@
+---
+import '../styles/global.css';
+import '../styles/chrome.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogType?: string;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = '杨天 — 全栈工程师。八年前端与全栈开发，做过低代码平台、数据自动化与海外电商自建站。',
+  ogType = 'website',
+  bodyClass = '',
+} = Astro.props;
+
+const site = Astro.site ?? Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL('/og.png', site).href;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#0d0d10" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      rel="preload"
+      href="/fonts/inter-tight-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip" href="#main">跳到正文</a>
+
+    <header class="nav" data-nav>
+      <div class="nav-in wrap">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-name">杨天</span>
+        </a>
+        <nav class="nav-links" aria-label="主导航">
+          <a href="/#work">作品</a>
+          <a href="/#about">关于</a>
+          <a href="/#contact">联系</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <div class="foot-left">
+          <span class="mono">杨天 · 2026</span>
+        </div>
+        <div class="foot-right">
+          <span class="mono foot-tech">Astro · 无框架运行时</span>
+          <a class="mono foot-mail" href="/#contact">邮件联系</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Nav theme follows whatever section sits under the bar, so it stays
+      // legible over the dark hero, the dark contact block, and the dark
+      // case-study headers alike.
+      const nav = document.querySelector('[data-nav]');
+      const darks = Array.from(document.querySelectorAll('[data-dark]'));
+      const probeY = 34;
+
+      const onScroll = () => {
+        const y = window.scrollY;
+        nav?.classList.toggle('is-stuck', y > 8);
+        const overDark = darks.some((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top <= probeY && r.bottom > probeY;
+        });
+        nav?.classList.toggle('on-paper', !overDark);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      // Reveal on scroll
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('on');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+      );
+      document.querySelectorAll('.rv').forEach((el) => io.observe(el));
+    </script>
+
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>
