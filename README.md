@@ -28,7 +28,7 @@ npm run preview  # 预览构建产物
 
 改文字只改这个文件；页面模板在 `src/pages/` 与 `src/components/`。
 
-新增一个案例：往 `cases` 数组里加一项，`slug` 会自动生成详情页并接入上一个/下一个导航。截图放 `public/img/<slug>.webp`，在条目里填 `image`；不填则自动使用内置的线稿图形（`CaseCard` 里按 slug 区分）。
+新增一个案例：往 `cases` 数组里加一项，`slug` 会自动生成详情页并接入上一个/下一个导航。截图放 `public/img/<slug>.webp`，在条目里填 `image`；不填则自动使用内置的线稿图形（`CaseRow` 里按 slug 区分）。
 
 ## 部署（GitHub Pages）
 
