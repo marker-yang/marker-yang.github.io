@@ -1,0 +1,1 @@
+import{t as e}from"./hero-net.BLuBvYiT.js";var t=document.querySelector(`[data-cs-canvas]`);t instanceof HTMLCanvasElement&&e(t);
