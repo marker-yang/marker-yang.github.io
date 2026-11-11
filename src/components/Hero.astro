@@ -85,19 +85,21 @@
     width: 100%;
     height: 100%;
     z-index: 0;
-    opacity: 0.72;
-    /* Fade the network out behind the type; keep it strongest at the right. */
-    mask-image: radial-gradient(
-      95% 85% at 82% 42%,
-      #000 0%,
-      rgba(0, 0, 0, 0.35) 42%,
-      transparent 72%
+    opacity: 1;
+    /* Only the far left is dimmed, so the headline keeps a clean field. */
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.45) 18%,
+      #000 42%,
+      #000 100%
     );
-    -webkit-mask-image: radial-gradient(
-      95% 85% at 82% 42%,
-      #000 0%,
-      rgba(0, 0, 0, 0.35) 42%,
-      transparent 72%
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.45) 18%,
+      #000 42%,
+      #000 100%
     );
   }
 
@@ -235,12 +237,14 @@
     font-size: 0.9rem;
     font-weight: 500;
     border: 1px solid transparent;
-    transition: background 0.3s var(--ease), color 0.3s var(--ease),
-      border-color 0.3s var(--ease), transform 0.3s var(--ease);
-    will-change: transform;
+    transition: background-color var(--t-base) var(--ease-soft),
+      color var(--t-base) var(--ease-soft),
+      border-color var(--t-base) var(--ease-soft),
+      transform var(--t-base) var(--ease),
+      box-shadow var(--t-base) var(--ease-soft);
   }
   .btn svg {
-    transition: transform 0.4s var(--ease);
+    transition: transform var(--t-base) var(--ease);
   }
   .btn-solid {
     background: var(--on-ink);
@@ -250,6 +254,7 @@
     background: var(--accent);
     color: #fff;
     transform: translateY(-2px);
+    box-shadow: 0 10px 30px -12px rgba(194, 35, 63, 0.55);
   }
   .btn-solid:hover svg {
     transform: translateY(3px);
@@ -260,7 +265,7 @@
   }
   .btn-ghost:hover {
     border-color: var(--on-ink);
-    background: rgba(243, 240, 232, 0.06);
+    background-color: rgba(243, 240, 232, 0.06);
   }
 
   /* Stats rail */
@@ -312,6 +317,22 @@
   }
 
   @media (max-width: 760px) {
+    .hero-canvas {
+      mask-image: linear-gradient(
+        180deg,
+        transparent 0%,
+        #000 8%,
+        #000 20%,
+        transparent 30%
+      );
+      -webkit-mask-image: linear-gradient(
+        180deg,
+        transparent 0%,
+        #000 8%,
+        #000 20%,
+        transparent 30%
+      );
+    }
     .hero-in {
       padding-bottom: 12rem;
     }

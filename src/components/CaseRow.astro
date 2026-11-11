@@ -143,7 +143,7 @@ const glyph: Glyph =
     width: 100%;
     height: auto;
     transform: translateY(var(--py, 0px));
-    transition: transform 1.1s var(--ease), filter 0.8s var(--ease);
+    transition: transform var(--t-slow) var(--ease);
   }
   .case-link:hover .shot img {
     transform: scale(1.03) translateY(var(--py, 0px));
@@ -250,7 +250,7 @@ const glyph: Glyph =
     color: var(--text);
   }
   .case-more svg {
-    transition: transform 0.4s var(--ease);
+    transition: transform var(--t-base) var(--ease);
   }
   .case-link:hover .case-more svg {
     transform: translateX(6px);

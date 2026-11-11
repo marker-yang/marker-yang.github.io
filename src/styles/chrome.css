@@ -11,7 +11,7 @@
   padding: 0.6rem 1rem;
   font-size: 0.85rem;
   transform: translateY(-120%);
-  transition: transform 0.2s;
+  transition: transform var(--t-base) var(--ease);
 }
 .skip:focus {
   transform: none;
@@ -22,8 +22,9 @@
   inset: 0 0 auto 0;
   z-index: 60;
   color: var(--on-ink);
-  transition: background 0.45s var(--ease), color 0.35s var(--ease),
-    border-color 0.45s var(--ease), backdrop-filter 0.4s;
+  transition: background-color var(--t-slow) var(--ease-soft),
+    color var(--t-base) var(--ease-soft),
+    border-color var(--t-slow) var(--ease-soft);
   border-bottom: 1px solid transparent;
 }
 .nav-in {
@@ -46,7 +47,7 @@
   border-radius: 2px;
   background: var(--accent);
   box-shadow: 0 0 0 3px rgba(194, 35, 63, 0.16);
-  transition: transform 0.5s var(--ease);
+  transition: transform var(--t-slow) var(--ease);
 }
 .brand:hover .brand-mark {
   transform: rotate(45deg) scale(1.15);
@@ -59,7 +60,7 @@
 .nav-links a {
   position: relative;
   opacity: 0.72;
-  transition: opacity 0.25s;
+  transition: opacity var(--t-base) var(--ease-soft);
   padding-block: 0.25rem;
 }
 .nav-links a:hover {
@@ -75,7 +76,7 @@
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s var(--ease);
+  transition: transform var(--t-base) var(--ease);
 }
 .nav-links a:hover::after {
   transform: scaleX(1);
@@ -130,7 +131,7 @@
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.35s var(--ease);
+  transition: transform var(--t-base) var(--ease);
 }
 .foot-mail:hover::after {
   transform: scaleX(1);

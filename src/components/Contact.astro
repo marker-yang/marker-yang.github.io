@@ -28,9 +28,11 @@
             </span>
           </button>
 
-          <div class="mail-out" data-mail-out hidden>
-            <span class="mail-addr mono" data-mail-addr aria-live="polite"></span>
-            <button class="mail-copy mono" type="button" data-mail-copy>复制</button>
+          <div class="mail-reveal" data-mail-reveal>
+            <div class="mail-out" data-mail-out>
+              <span class="mail-addr mono" data-mail-addr aria-live="polite"></span>
+              <button class="mail-copy mono" type="button" data-mail-copy tabindex="-1">复制</button>
+            </div>
           </div>
           <noscript>
             <p class="mail-addr mono mail-addr-static">yangmarker26<span aria-hidden="true"> [at] </span>gmail.com</p>
@@ -53,14 +55,15 @@
     const copy = root.querySelector<HTMLButtonElement>('[data-mail-copy]');
     if (!toggle || !out || !addr || !copy) return;
 
+    const reveal = root.querySelector<HTMLElement>('[data-mail-reveal]');
+    if (!reveal) return;
+
     toggle.addEventListener('click', () => {
-      const open = out.hidden;
-      out.hidden = !open;
+      const open = !reveal.classList.contains('open');
+      reveal.classList.toggle('open', open);
       toggle.setAttribute('aria-expanded', String(open));
-      if (open) {
-        addr.textContent = mail;
-        addr.classList.add('on');
-      }
+      copy.tabIndex = open ? 0 : -1;
+      addr.textContent = mail;
     });
 
     copy.addEventListener('click', async () => {
@@ -146,7 +149,9 @@
     height: 30px;
     border: 1px solid var(--on-ink-line);
     border-radius: 50%;
-    transition: background 0.3s, border-color 0.3s, transform 0.4s var(--ease);
+    transition: background-color var(--t-base) var(--ease-soft),
+      border-color var(--t-base) var(--ease-soft),
+      transform var(--t-base) var(--ease);
   }
   .mail-btn:hover .mail-ico {
     background: var(--accent);
@@ -160,15 +165,37 @@
     text-decoration-color: rgba(243, 240, 232, 0.4);
   }
 
+  /* Height + opacity both transition, so the address unfolds instead of
+     popping into place. 0fr -> 1fr animates grid tracks, which needs no
+     magic max-height number. */
+  .mail-reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.5s var(--ease),
+      opacity 0.45s var(--ease), margin-top 0.5s var(--ease);
+    margin-top: 0;
+  }
+  .mail-reveal.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 1rem;
+  }
+  .mail-reveal > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+
   .mail-out {
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    margin-top: 1rem;
     flex-wrap: wrap;
+    transform: translateY(-6px);
+    transition: transform var(--t-slow) var(--ease);
   }
-  .mail-out[hidden] {
-    display: none;
+  .mail-reveal.open .mail-out {
+    transform: none;
   }
   .mail-addr {
     font-size: 0.86rem;
@@ -177,9 +204,6 @@
     color: var(--on-ink);
     border-bottom: 1px dashed rgba(243, 240, 232, 0.28);
     padding-bottom: 2px;
-  }
-  .mail-addr.on {
-    animation: fade-up 0.45s var(--ease) both;
   }
   .mail-addr-static {
     margin-top: 1rem;
@@ -192,22 +216,16 @@
     border: 1px solid var(--on-ink-line);
     padding: 0.3rem 0.55rem;
     border-radius: 2px;
-    transition: color 0.25s, border-color 0.25s;
+    transition: color var(--t-base) var(--ease-soft),
+      border-color var(--t-base) var(--ease-soft),
+      background-color var(--t-base) var(--ease-soft);
   }
   .mail-copy:hover {
     color: var(--on-ink);
     border-color: rgba(243, 240, 232, 0.5);
   }
 
-  @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+
   }
 
   @media (max-width: 820px) {

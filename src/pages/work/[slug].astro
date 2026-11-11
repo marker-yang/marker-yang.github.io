@@ -216,7 +216,7 @@ const b = study.body;
     font-size: 0.63rem;
     letter-spacing: 0.1em;
     margin-bottom: clamp(2rem, 6vw, 4rem);
-    transition: color 0.25s, transform 0.35s var(--ease);
+    transition: color var(--t-base) var(--ease-soft), transform var(--t-base) var(--ease);
   }
   .back:hover {
     color: var(--on-ink);
@@ -485,7 +485,7 @@ const b = study.body;
   .cs-nav-title {
     font-size: 1rem;
     font-weight: 500;
-    transition: color 0.25s;
+    transition: color var(--t-base) var(--ease-soft);
   }
   .cs-nav-item:hover .cs-nav-title {
     color: var(--accent);
@@ -512,7 +512,7 @@ const b = study.body;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     color: var(--accent);
-    transition: transform 0.35s var(--ease);
+    transition: transform var(--t-base) var(--ease);
     display: inline-block;
   }
   .cs-cta-link:hover {
