@@ -15,7 +15,10 @@ const glyph: Glyph =
   study.slug === 'this-site' ? 'layout' : 'pipeline';
 ---
 
-<article class={`case ${order % 2 === 1 ? 'flip' : ''}`} id={anchor}>
+<article
+  class={`case ${order % 2 === 1 ? 'flip' : ''} ${study.image?.wide ? 'is-wide' : ''}`}
+  id={anchor}
+>
   <a class="case-link" href={`/work/${study.slug}/`} aria-label={`查看案例：${study.title}`}>
     <div class="case-media rv">
       {study.image ? (
@@ -79,17 +82,20 @@ const glyph: Glyph =
     </div>
 
     <div class="case-body">
-      <div class="case-head rv">
-        <span class="mono case-client">{study.client}</span>
-        <span class="mono case-period">{study.period}</span>
+      <div class="case-text">
+        <div class="case-head rv">
+          <span class="mono case-client">{study.client}</span>
+          <span class="mono case-period">{study.period}</span>
+        </div>
+        <h3 class="case-title rv">{study.title}</h3>
+        <p class="case-sum rv">{study.summary}</p>
+
+        <ul class="case-stack rv">
+          {study.stack.map((s) => <li class="mono">{s}</li>)}
+        </ul>
       </div>
-      <h3 class="case-title rv">{study.title}</h3>
-      <p class="case-sum rv">{study.summary}</p>
 
-      <ul class="case-stack rv">
-        {study.stack.map((s) => <li class="mono">{s}</li>)}
-      </ul>
-
+      <div class="case-figures">
       <dl class="case-metrics rv">
         {study.metrics.map((m) => (
           <div class="cm">
@@ -105,6 +111,7 @@ const glyph: Glyph =
           <path d="M0 5h14M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </span>
+      </div>
     </div>
   </a>
 </article>
@@ -126,6 +133,42 @@ const glyph: Glyph =
   }
   .case.flip .case-media {
     order: 2;
+  }
+
+  /* Ultra-wide promo shots read badly squeezed into a half column; give them
+     the full measure and let the copy sit beside them underneath. */
+  .case.is-wide .case-link {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .case.is-wide .case-media {
+    order: -1;
+  }
+  .case.is-wide .case-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(1.25rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .case.is-wide .case-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .case.is-wide .case-metrics {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 1.35rem;
+  }
+  .case.is-wide .case-figures {
+    display: flex;
+    flex-direction: column;
+  }
+  /* Client then period, tight together, instead of one pushed to each edge. */
+  .case.is-wide .case-head {
+    justify-content: flex-start;
+    gap: 1.25rem;
+    flex-wrap: wrap;
   }
 
   .case-media {
@@ -178,6 +221,7 @@ const glyph: Glyph =
     display: flex;
     flex-direction: column;
   }
+
   .case-head {
     display: flex;
     justify-content: space-between;
@@ -269,6 +313,19 @@ const glyph: Glyph =
   }
 
   @media (max-width: 860px) {
+    .case.is-wide .case-body {
+      display: flex;
+      flex-direction: column;
+    }
+    .case.is-wide .case-figures {
+      display: flex;
+      flex-direction: column;
+    }
+    .case.is-wide .case-metrics {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.3rem;
+    }
     .case-link,
     .case.flip .case-link {
       grid-template-columns: 1fr;

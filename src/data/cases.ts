@@ -10,7 +10,7 @@ export type CaseStudy = {
   stack: string[];
   summary: string;
   metrics: Metric[];
-  image?: { src: string; alt: string; ratio: string };
+  image?: { src: string; alt: string; ratio: string; wide?: boolean };
   diagram?: 'pipeline';
   body: {
     context: string;
@@ -124,7 +124,7 @@ export const cases: CaseStudy[] = [
     slug: 'dtc',
     index: '03',
     title: '海外电商自建站',
-    client: 'Keppel（新加坡）',
+    client: 'EK Lights（广东熠日科技）',
     period: '2025.04 — 2026.10',
     role: '前端与自动化',
     stack: ['Shopify OS 2.0', 'Liquid', 'Vue3', 'Metafields', 'PageSpeed Insights'],
@@ -137,14 +137,15 @@ export const cases: CaseStudy[] = [
     ],
     image: {
       src: '/img/dtc.webp',
-      alt: '海外企业官网在平板与手机上的展示',
+      alt: 'EK Lights 官网在笔记本与手机上的展示：首页主视觉、产品列表与 Claypaky 收购新闻',
       ratio: '1600 / 493',
+      wide: true,
     },
     body: {
       context:
-        '基于 Shopify OS 2.0 为一家新加坡集团搭建品牌自建站。它既要看起来像一个严肃的全球企业，又要保留电商能力：商品、购物车、促销，一个都不能少。',
+        '专业舞台灯光品牌 EK Lights 的海外官网。它既要撑住一个全球品牌的形象——大画幅的产品摄影、克制的排版、多语言——又要保留完整的电商能力：产品线导航、商品详情、购物车与促销，一个都不能少。',
       problem: [
-        '运营依赖研发。改一句文案、换一张图、上下架一批商品，都要排进研发的迭代里。',
+        '运营依赖研发。EK 的产品线有 MC、EC、K 系列等多条，改一句文案、换一张图、上下架一款灯，都要排进研发的迭代里。',
         '首屏 4 秒以上。第三方 App 各自注入脚本和样式，加上未压缩的图片，用户在看到内容之前就流失了。',
         '购物链路割裂。原生的跳页式购物车打断了浏览，加购转化率一直上不去。',
       ],
